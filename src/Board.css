@@ -1,0 +1,13 @@
+.Board {
+  width: 80%;
+  margin: 15px auto;
+}
+
+.Board-table {
+  border: 1px solid;
+  margin: 0 auto;
+}
+
+.Board-row {
+  margin: 0 auto;
+}
