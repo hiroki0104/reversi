@@ -8,12 +8,14 @@ class Cell extends Component {
   }
 
   handleClick() {
-    this.props.turn_over(this.props.pos);
+    this.props.turnOver(this.props.pos);
   }
 
   render() {
     return (
-      <td onClick={this.handleClick} className='Cell'>
+      <td
+        onClick={this.handleClick}
+        className={this.props.isFlipable ? 'Cell Cell-highlight' : 'Cell'}>
         {this.props.stone}
       </td>
     );

@@ -3,3 +3,7 @@
   height: 50px;
   border: 1px solid;
 }
+
+.Cell-highlight {
+  background-color: aliceblue;
+}

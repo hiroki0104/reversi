@@ -7,10 +7,11 @@ class Board extends Component {
     super(props);
     this.state = {
       board: this.initialBoard(),
-      isNext: true,
+      isplayerBlack: true,
     };
 
-    this.turn_over = this.turn_over.bind(this);
+    this.turnOver = this.turnOver.bind(this);
+    this.flipableCells = this.flipableCells.bind(this);
   }
 
   initialBoard() {
@@ -19,9 +20,9 @@ class Board extends Component {
       let row = [];
       for (let x = 0; x < 8; x++) {
         if ((y === 3 && x === 3) || (y === 4 && x === 4)) {
-          row.push('○');
+          row.push('白');
         } else if ((y === 3 && x === 4) || (y === 4 && x === 3)) {
-          row.push('●');
+          row.push('黒');
         } else {
           row.push(null);
         }
@@ -31,7 +32,7 @@ class Board extends Component {
     return initialboard;
   }
 
-  turn_over(idx) {
+  turnOver(idx) {
     let [yPos, xPos] = idx.split('-');
     const intY = parseInt(yPos);
     const intX = parseInt(xPos);
@@ -40,22 +41,23 @@ class Board extends Component {
     let flipeCells = this.flipableCells(intY, intX);
     if (flipeCells.length === 0) return;
 
-    this.setState({
-      board: this.newBoard(intY, intX, flipeCells),
-      isNext: !this.state.isNext,
-    });
-  }
-
-  newBoard(yPos, xPos, flipeCells) {
+    let player = this.state.isplayerBlack ? '黒' : '白';
     let oldBoard = this.state.board.slice();
-    oldBoard[yPos][xPos] = this.state.isNext ? '●' : '○';
 
-    flipeCells.forEach((val) => {
-      const y = val[0];
-      const x = val[1];
-      oldBoard[y][x] = this.state.isNext ? '●' : '○';
+    function newBoard(yPos, xPos, flipeCells) {
+      oldBoard[yPos][xPos] = player;
+      flipeCells.forEach((val) => {
+        const y = val[0];
+        const x = val[1];
+        oldBoard[y][x] = player;
+      });
+      return oldBoard;
+    }
+
+    this.setState({
+      board: newBoard(intY, intX, flipeCells),
+      isplayerBlack: !this.state.isplayerBlack,
     });
-    return oldBoard;
   }
 
   flipableCells(yPos, xPos) {
@@ -70,46 +72,48 @@ class Board extends Component {
       [-1, -1], // ↖
     ];
     let newArr = [];
+    const currentBoard = this.state.board.slice();
+    const player = this.state.isplayerBlack ? '黒' : '白';
+
+    function flipeCells(yPos, xPos, y, x) {
+      let flipeCells = [];
+      let flipeY = yPos + y;
+      let flipeX = xPos + x;
+      while (true) {
+        if (
+          0 > flipeX ||
+          0 > flipeY ||
+          flipeX > 7 ||
+          flipeY > 7 ||
+          currentBoard[flipeY][flipeX] === null
+        ) {
+          return [];
+        } else if (currentBoard[flipeY][flipeX] === player) {
+          return flipeCells;
+        } else {
+          flipeCells.push([flipeY, flipeX]);
+          flipeY += y;
+          flipeX += x;
+        }
+      }
+    }
+
     direction.forEach((val) => {
-      newArr = newArr.concat(this.flipeCells(yPos, xPos, val[0], val[1]));
+      newArr = newArr.concat(flipeCells(yPos, xPos, val[0], val[1]));
     });
 
     return newArr;
-  }
-
-  flipeCells(yPos, xPos, y, x) {
-    const currentBoard = this.state.board.slice();
-    const player = this.state.isNext ? '●' : '○';
-    let flipeCells = [];
-    let flipeY = yPos + y;
-    let flipeX = xPos + x;
-    while (true) {
-      if (
-        0 > flipeX ||
-        0 > flipeY ||
-        flipeX > 7 ||
-        flipeY > 7 ||
-        currentBoard[flipeY][flipeX] === null
-      ) {
-        return [];
-      } else if (currentBoard[flipeY][flipeX] === player) {
-        return flipeCells;
-      } else {
-        flipeCells.push([flipeY, flipeX]);
-        flipeY += y;
-        flipeX += x;
-      }
-    }
   }
 
   render() {
     const board = this.state.board.map((row, y) => {
       let displayRow = row.map((col, x) => (
         <Cell
-          turn_over={this.turn_over}
+          turnOver={this.turnOver}
           key={`${y}-${x}`}
           pos={`${y}-${x}`}
           stone={col}
+          isFlipable={!!this.flipableCells(y, x).length && col === null}
         />
       ));
       return (
