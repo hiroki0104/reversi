@@ -12,11 +12,20 @@ class Cell extends Component {
   }
 
   render() {
+    const { isFlipable, stone } = this.props;
+    let cell;
+    if (stone === '黒') {
+      cell = <span className='black-circle'></span>;
+    } else if (stone === '白') {
+      cell = <span className='white-circle'></span>;
+    } else {
+      cell = <span></span>;
+    }
     return (
       <td
         onClick={this.handleClick}
-        className={this.props.isFlipable ? 'Cell Cell-highlight' : 'Cell'}>
-        {this.props.stone}
+        className={isFlipable ? 'Cell Cell-highlight' : 'Cell'}>
+        {cell}
       </td>
     );
   }

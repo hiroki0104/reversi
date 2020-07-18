@@ -4,8 +4,8 @@ import Board from './Board';
 
 function App() {
   return (
-    <div className="App">
-      <h1>App</h1>
+    <div className='App'>
+      <h1>オセロ!!</h1>
       <Board />
     </div>
   );
