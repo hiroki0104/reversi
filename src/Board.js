@@ -161,17 +161,19 @@ class Board extends Component {
     if (!this.canFlipe(currentPlayer) && !this.canFlipe(nextPlayer)) {
       if (blackStoneCounts !== whiteStoneCounts) {
         Winner = blackStoneCounts > whiteStoneCounts ? '黒' : '白';
-        result = <div>勝者は{Winner}です</div>;
+        result = <div className='game-over'>勝者は{Winner}です</div>;
       } else {
-        result = <div>試合は引き分けです！素晴らしい戦いでした</div>;
+        result = (
+          <div className='game-over'>
+            試合は引き分けです！素晴らしい戦いでした
+          </div>
+        );
       }
     } else {
       result = (
-        <React.Fragment>
-          <div className='current-hand'>
-            <span>{currentPlayer}の番</span>
-          </div>
-        </React.Fragment>
+        <div className='current-hand'>
+          <span>{currentPlayer}の番</span>
+        </div>
       );
     }
 
@@ -197,6 +199,7 @@ class Board extends Component {
 
     return (
       <div className='Board'>
+        <div className='Board-progress'>{result}</div>
         <div className='Board-score'>
           <div
             className={
@@ -214,10 +217,6 @@ class Board extends Component {
         <table className='Board-table'>
           <tbody>{board}</tbody>
         </table>
-
-        <div className='Board-progress'>
-          <div className="game-over">試合は引き分けです！素晴らしい戦いでした</div>
-        </div>
       </div>
     );
   }
