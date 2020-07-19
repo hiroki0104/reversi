@@ -1,0 +1,82 @@
+.Board {
+  width: 80%;
+  margin: 0px auto;
+}
+
+.Board-table {
+  border: 1px solid;
+  border-radius: 10px;
+  width: 30%;
+  margin: 0 auto;
+  box-shadow: 3px 2px 2px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+
+.Board-score {
+  margin: 0 auto;
+  width: 440px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.score {
+  border-radius: 10px 10px 0 0;
+  width: 25%;
+  height: 100px;
+  transform: translateY(50px);
+  z-index: -20;
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 50px;
+  text-align: center;
+  transition: transform 0.5s ease-in-out;
+}
+
+.score.black {
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 3px 0 3px rgba(0, 0, 0, 0.4);
+  color: #fff;
+}
+
+.score.white {
+  background-color: rgba(256, 256, 256, 0.9);
+  box-shadow: 3px 0 3px rgba(0, 0, 0, 0.2);
+  color: #222;
+}
+
+.score.current {
+  transform: translateY(0px);
+}
+
+.Board-progress {
+  width: 440px;
+  margin: 15px auto;
+  text-align: center;
+}
+
+.current-hand {
+  background: linear-gradient(90deg, #ffffff 50%, #000000 50%) no-repeat 50% 50% /
+    100% 100%;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 36px;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.current-hand span {
+  display: block;
+  color: #acb6e5;
+  background: linear-gradient(90deg, #000000 50%, #ffffff 51%) no-repeat 50% 50% /
+    100% 100%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.game-over {
+  background-color: #fff;
+  padding: 20px;
+  font-weight: 700;
+  font-size: 26px;
+  border-radius: 10px;
+}
