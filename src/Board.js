@@ -16,6 +16,7 @@ class Board extends Component {
     this.countStone = this.countStone.bind(this);
   }
 
+  // 初期の8x8の盤面の生成
   initialBoard() {
     let initialboard = [];
     for (let y = 0; y < 8; y++) {
@@ -40,12 +41,14 @@ class Board extends Component {
     const intX = parseInt(xPos);
     if (this.state.board[intY][intX]) return;
 
+    // ひっくり返せる石があるかどうか
     let player = this.state.isplayerBlack ? '黒' : '白';
     let oldBoard = this.state.board.slice();
 
     let flipeCells = this.flipableCells(intY, intX, player);
     if (flipeCells.length === 0) return;
 
+    // ひっくり返す処理が終わった盤面を作成する
     function newBoard(yPos, xPos, flipeCells) {
       oldBoard[yPos][xPos] = player;
       flipeCells.forEach((val) => {
@@ -68,6 +71,7 @@ class Board extends Component {
     );
   }
 
+  // ひっくり返せる石の座標を配列で返す
   flipableCells(yPos, xPos, player) {
     const direction = [
       [-1, 0], // ↑
@@ -82,7 +86,8 @@ class Board extends Component {
     let newArr = [];
     const currentBoard = this.state.board.slice();
 
-    function flipeCells(yPos, xPos, y, x) {
+    // 各方向に対してひっくり返せる石の配列を生成
+    function directionflipeCells(yPos, xPos, y, x) {
       let flipeCells = [];
       let flipeY = yPos + y;
       let flipeX = xPos + x;
@@ -106,12 +111,13 @@ class Board extends Component {
     }
 
     direction.forEach((val) => {
-      newArr = newArr.concat(flipeCells(yPos, xPos, val[0], val[1]));
+      newArr = newArr.concat(directionflipeCells(yPos, xPos, val[0], val[1]));
     });
 
     return newArr;
   }
 
+  // そのプレイヤーが石を置けるマスがあるかどうか
   canFlipe(player) {
     for (let y = 0; y < 8; ++y) {
       for (let x = 0; x < 8; ++x) {
@@ -134,6 +140,7 @@ class Board extends Component {
   }
 
   countStone() {
+    // 初期値
     let lookUp = {
       黒: 0,
       白: 0,
@@ -153,29 +160,34 @@ class Board extends Component {
   render() {
     const currentPlayer = this.state.isplayerBlack ? '黒' : '白';
     const nextPlayer = !this.state.isplayerBlack ? '黒' : '白';
+
     let lookUp = this.countStone();
     const blackStoneCounts = lookUp['黒'];
     const whiteStoneCounts = lookUp['白'];
 
+    // 進行状況の把握
     let result, Winner;
     if (!this.canFlipe(currentPlayer) && !this.canFlipe(nextPlayer)) {
       if (blackStoneCounts !== whiteStoneCounts) {
         Winner = blackStoneCounts > whiteStoneCounts ? '黒' : '白';
-        result = <div>勝者は{Winner}です</div>;
+        result = <div className='game-over'>勝者は{Winner}です</div>;
       } else {
-        result = <div>試合は引き分けです！素晴らしい戦いでした</div>;
+        result = (
+          <div className='game-over'>
+            試合は引き分けです！素晴らしい戦いでした
+          </div>
+        );
       }
     } else {
       result = (
-        <React.Fragment>
-          <div className='current-hand'>
-            <span>{currentPlayer}の番</span>
-          </div>
-        </React.Fragment>
+        <div className='current-hand'>
+          <span>{currentPlayer}の番</span>
+        </div>
       );
     }
 
     const board = this.state.board.map((row, y) => {
+      // マス目
       let displayRow = row.map((col, x) => (
         <Cell
           turnOver={this.turnOver}
@@ -188,6 +200,7 @@ class Board extends Component {
         />
       ));
 
+      // 行
       return (
         <tr className='Board-row' key={y}>
           {displayRow}
@@ -197,12 +210,19 @@ class Board extends Component {
 
     return (
       <div className='Board'>
-        <div className='Board-score'>
+        <div className='Board-result'>{result}</div>
+        <div className='Board-progress'>
           <div
             className={
               this.state.isplayerBlack ? 'score black current' : 'score black'
             }>
             黒 : {blackStoneCounts}枚
+          </div>
+          <div className='Board-prev'>
+            <button className='btn btn-icon'>
+              <i className='fas fa-redo-alt'></i>
+              一手戻る
+            </button>
           </div>
           <div
             className={
@@ -214,10 +234,6 @@ class Board extends Component {
         <table className='Board-table'>
           <tbody>{board}</tbody>
         </table>
-
-        <div className='Board-progress'>
-          <div className="game-over">試合は引き分けです！素晴らしい戦いでした</div>
-        </div>
       </div>
     );
   }

@@ -5,7 +5,6 @@
   background-color: #41c541;
 }
 
-
 .Cell.Cell-highlight {
   background-color: #64ec82c0;
 }
@@ -28,7 +27,8 @@
   height: 80%;
   margin: 0 auto;
   border-radius: 50%;
-  border: 1px solid rgba(0, 0, 0, 0.4);
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
-  background-color: #EEEEEE;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  background: linear-gradient(125deg, #ffffff 0%, #b2b2b2 100%) no-repeat 50%
+    50% / 100% 100%;
 }
