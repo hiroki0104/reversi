@@ -15,7 +15,7 @@ class Reversi extends Component {
       isplayerBlack: true,
     };
 
-    // this.redo = this.redo.bind(this);
+    this.redo = this.redo.bind(this);
   }
 
   // 初期の8x8の盤面の生成
@@ -38,9 +38,10 @@ class Reversi extends Component {
   }
 
   turnOver(idx) {
-    const history = this.state.history.slice();
-    const current = history[history.length - 1];
-    let currentBoard = current.board.slice();
+    const current = JSON.parse(
+      JSON.stringify(this.state.history[this.state.history.length - 1])
+    );
+    let currentBoard = current.board;
 
     let [yPos, xPos] = idx.split('-');
     const intY = parseInt(yPos);
@@ -164,17 +165,17 @@ class Reversi extends Component {
     return lookUp;
   }
 
-  // うまくいかない
-  // redo() {
-  //   const redohistory = this.state.history.slice(
-  //     0,
-  //     this.state.history.length - 1
-  //   );
-  //   this.setState({
-  //     history: redohistory,
-  //     isplayerBlack: !this.state.isplayerBlack,
-  //   });
-  // }
+  redo() {
+    if (this.state.history.length === 1) return;
+    const redohistory = this.state.history.slice(
+      0,
+      this.state.history.length - 1
+    );
+    this.setState({
+      history: redohistory,
+      isplayerBlack: !this.state.isplayerBlack,
+    });
+  }
 
   render() {
     const history = this.state.history;
@@ -214,20 +215,20 @@ class Reversi extends Component {
 
     return (
       <div className='Reversi'>
-        <div className='Board-result'>{result}</div>
-        <div className='Board-progress'>
+        <div className='Reversi-result'>{result}</div>
+        <div className='Reversi-progress'>
           <div
             className={
               this.state.isplayerBlack ? 'score black current' : 'score black'
             }>
             黒 : {blackStoneCounts}枚
           </div>
-          <div className='Board-prev'>
+          <div className='prev'>
             {/* redo button */}
-            {/* <button className='btn btn-icon' onClick={this.redo}>
+            <button className='btn btn-icon' onClick={this.redo}>
               <i className='fas fa-redo-alt'></i>
               一手戻る
-            </button> */}
+            </button>
           </div>
           <div
             className={
