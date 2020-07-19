@@ -2,15 +2,6 @@ import React, { Component } from 'react';
 import './Cell.css';
 
 class Cell extends Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.props.turnOver(this.props.pos);
-  }
-
   render() {
     const { isFlipable, stone } = this.props;
 
@@ -24,7 +15,7 @@ class Cell extends Component {
 
     return (
       <td
-        onClick={this.handleClick}
+        onClick={this.props.turnOver}
         className={isFlipable ? 'Cell Cell-highlight' : 'Cell'}>
         {cell}
       </td>
