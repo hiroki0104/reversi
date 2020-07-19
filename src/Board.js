@@ -7,6 +7,7 @@ class Board extends Component {
     const { board, player } = this.props;
     const displayBoard = board.map((row, y) => {
       // マス目
+
       let displayRow = row.map((col, x) => (
         <Cell
           turnOver={() => this.props.turnOver(`${y}-${x}`)}
@@ -29,9 +30,11 @@ class Board extends Component {
     });
 
     return (
+
       <table className='Board-table'>
         <tbody>{displayBoard}</tbody>
       </table>
+
     );
   }
 }
